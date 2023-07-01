@@ -38,12 +38,12 @@ class MyAccountmanager(BaseUserManager):
         user.save(using = self._db)
  
 class User(AbstractBaseUser,PermissionsMixin):
-    RESTAURANT  = 1
+    VENDOR  = 1
     CUSTOMER    = 2
 
     
     ROLE_CHOICE = (
-        (RESTAURANT,   'RESTAURANT'),
+        (VENDOR,   'VENDOR'),
         (CUSTOMER,     'CUSTOMER'),
     )
     
@@ -88,7 +88,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     
     def get_role(self):
         if self.role == 1:
-            user_role = 'RESTAURANT'
+            user_role = 'VENDOR'
         elif self.role == 2:
             user_role = 'CUSTOMER'
         return user_role
