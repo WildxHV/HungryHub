@@ -8,7 +8,7 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('category_name', 'vendor__vendor_name')
     
 class FoodItemAdmin(admin.ModelAdmin):
-    prepopulated_fields = { 'slug' : ('category_name',)}
+    prepopulated_fields = { 'slug' : ('food_title',)}
     list_display = ('food_title', 'category', 'vendor', 'updated_at')
     search_fields = ('food_title' ,'category__category_name', 'vendor__vendor_name')
     

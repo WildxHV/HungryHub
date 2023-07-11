@@ -52,9 +52,9 @@ def vprofile(request):
 @user_passes_test(check_role_vendor)
 def menu_builder(request):
     vendor = Vendor.objects.get(user=request.user)
-    categories = Category.Objects.filter(vendor = vendor).order_by('created_at')
+    categories = Category.objects.filter(vendor=vendor).order_by('created_at')
     context = {
-        'categories' : categories,
+        'categories': categories,
     }
     return render(request, 'vendor/menu_builder.html', context)
 
@@ -105,7 +105,7 @@ def add_category(request):
 
 @login_required(login_url='login')
 @user_passes_test(check_role_vendor)
-def edit_category(request,pk =None):
+def edit_category(request, pk =None):
     category = get_object_or_404(Category, pk = pk)
     if request.method == "POST":
         form = CategoryForm(request.POST, instance=category)
@@ -128,7 +128,7 @@ def edit_category(request,pk =None):
         'category' : category,
     }
 
-    return render(request, 'vendor/edit_category.html')
+    return render(request, 'vendor/edit_category.html',context)
 
 
 
@@ -145,10 +145,10 @@ def delete_category(request, pk = None):
 @login_required(login_url='login')
 @user_passes_test(check_role_vendor)
 def add_food(request):
+    vendor = Vendor.objects.get(user=request.user)
     if request.method == 'POST':
         form = FoodItemForm(request.POST, request.FILES)
         if form.is_valid():
-            vendor = Vendor.objects.get(user = request.user)
             foodtitle = form.cleaned_data['food_title']
             food = form.save(commit=False)
             food.vendor = vendor
@@ -172,11 +172,12 @@ def add_food(request):
 @user_passes_test(check_role_vendor)
 def edit_food(request,pk =None):
     food = get_object_or_404(FoodItem, pk = pk)
+    vendor = Vendor.objects.get(user=request.user)
+    
     if request.method == "POST":
-        form = CategoryForm(request.POST, instance=food)
+        form = FoodItemForm(request.POST, instance=food)
         if form.is_valid():
             foodtitle = form.cleaned_data['food_title']
-            vendor = Vendor.objects.get(user=request.user)
             food = form.save(commit = False)
             food.vendor = vendor
             food.slug = slugify(foodtitle)
@@ -186,7 +187,7 @@ def edit_food(request,pk =None):
         else:
             print(form.errors)
     else:
-        form = CategoryForm(instance= food)
+        form = FoodItemForm(instance= food)
         form.fields['category'].queryset = Category.objects.filter(vendor = vendor)
     
     context = {
@@ -194,7 +195,7 @@ def edit_food(request,pk =None):
         'food' : food,
     }
 
-    return render(request, 'vendor/edit_food.html')
+    return render(request, 'vendor/edit_food.html', context)
 
 
 

@@ -19,6 +19,7 @@ from . import views
 from django.conf.urls.static import static
 from django.conf import settings
 from django.conf.urls import handler404, handler500
+from marketplace import views as MarketplaceViews
 
 handler404 = 'HungryHub.views.custom_error_404'
 handler500 = 'HungryHub.views.custom_error_500'
@@ -30,5 +31,8 @@ urlpatterns = [
     path('vendor/', include('vendor.urls')),
     
     path('marketplace/', include('marketplace.urls')),
+    
+     # CART
+    path('cart/', MarketplaceViews.cart, name='cart'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
